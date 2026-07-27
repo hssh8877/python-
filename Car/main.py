@@ -20,6 +20,15 @@ class Car:
             print(f"{self.name} exceeds the maximum speed!")
 
     def accelerate(self, amount):
+        try:
+            amount = int(amount)
+        except ValueError:
+            print("Please enter an integer value.")
+            return
+        if amount <= 0:
+            print("Amount must be greater than 0.")
+            return
+
         self.speed += amount
         if self.speed > self.maxspeed:
             self.speed = self.maxspeed
@@ -27,17 +36,30 @@ class Car:
         self.drive()
 
     def brake(self, amount):
+        try:
+            amount = int(amount)
+        except ValueError:
+            print("Please enter an integer value.")
+            return
+        if amount <= 0:
+            print("Amount must be greater than 0.")
+            return
         self.speed -= amount
         if self.speed < self.minspeed:
             self.speed = self.minspeed
         print(f"{self.name} is slowing down to {self.speed} m/ph.")
         self.drive()
+
 class Garage:
     def __init__(self):
         self.cars = {}
 
     def add_car(self, car):
+        if car.name in self.cars:
+            print(f"{car.name} is already in the garage.")
+            return
         self.cars[car.name] = car
+        print(f"{car.name} added to the garage.")
 
     def get_car(self, name):
         if name in self.cars:
@@ -50,6 +72,7 @@ class Garage:
         print("Cars in the garage:")
         for name in self.cars:
             print(f"- {name}")
+
 garage = Garage()
 
 garage.add_car(Car("Opel", 90))
@@ -80,11 +103,11 @@ while True:
         action = input("Choose an action: ")
 
         if action == "1":
-            amount = int(input("Accelerate by: "))
+            amount = (input("Accelerate by: "))
             car.accelerate(amount)
 
         elif action == "2":
-            amount = int(input("Brake by: "))
+            amount = (input("Brake by: "))
             car.brake(amount)
 
         elif action == "3":
@@ -96,3 +119,6 @@ while True:
         elif action == "5":
             print("Exiting program.")
             exit()
+
+        else:
+            print("Invalid choice. Please select a valid option.")
