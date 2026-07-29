@@ -2,6 +2,8 @@ import argparse
 import hashlib
 import json
 import os
+import string
+import random
 
 MASTER_FILE = "master.json"
 PASSWORDS_FILE = "passwords.json"
@@ -89,6 +91,15 @@ def list_passwords():
     for name in passwords:
         print(name)
 
+def generate_password(length: int) -> str:
+    if length < 4:
+        print("Password must be at least 4 characters long.")
+        return ""
+
+    chars = string.ascii_letters + string.digits + string.punctuation
+    password = "".join(random.choice(chars) for _ in range(length))
+    return password
+
 def main():
     parser = argparse.ArgumentParser(description="Password Manager CLI")
     subparsers = parser.add_subparsers(dest="command")
@@ -106,10 +117,18 @@ def main():
     subparsers.add_parser("list", help="List all stored passwords")
     subparsers.add_parser("set-master", help="Set a master password")
 
+    generate_parser = subparsers.add_parser("generate", help="Generate a strong password")
+    generate_parser.add_argument("length", type=int, help="Length of the password")
+
     args = parser.parse_args()
 
     if args.command == "set-master":
         set_master_password()
+
+    elif args.command == "generate":
+        pwd = generate_password(args.length)
+        if pwd:
+            print(f"Generated password: {pwd}")
 
     elif args.command in ["add", "get", "delete", "list"]:
         if not verify_master_password():
