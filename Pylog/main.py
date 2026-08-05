@@ -10,23 +10,29 @@ def pylog(func):
         print(f"[KWARGS] {kwargs}")
 
         start = time.perf_counter()
+        result = None
+        error = None
 
         try:
             result = func(*args, **kwargs)
         except Exception as e:
+            error = e
             print(f"[ERROR]  {func.__name__} crashed: {e}")
+        finally:
+            end = time.perf_counter()
+            duration = (end - start) * 1000
+
+            print(f"[TIME]   {duration:.2f} ms")
+
+            if error is None:
+                print(f"[RESULT] {result}")
+
             print("=" * 40)
-            return None
-
-        end = time.perf_counter()
-        duration = (end - start) * 1000
-
-        print(f"[RESULT] {result}")
-        print(f"[TIME]   {duration:.2f} ms")
-        print("=" * 40)
 
         return result
     return wrapper
+
+
 
 def get_number(prompt):
     try:
