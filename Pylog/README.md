@@ -13,3 +13,7 @@ Reusable decorator for any function
 Simple CLI menu to demonstrate functionality
 
 Input validation for numeric operations
+
+Graceful failure handling – errors are caught and logged without crashing the program
+
+Simulated random workload for testing variable execution times
